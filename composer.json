@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "jolicode/jolinotif": "~1.0",
-        "phpunit/phpunit": "~4.0"
+        "jolicode/jolinotif": "~1.2",
+        "phpunit/phpunit": "~6.0"
     },
     "autoload": {
         "psr-4": {
