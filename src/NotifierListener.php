@@ -5,11 +5,13 @@ namespace PHPUnitNotifier;
 use Joli\JoliNotif\Notification;
 use Joli\JoliNotif\NotifierFactory;
 use Joli\JoliNotif\Util\OsHelper;
-use PHPUnit_Framework_Test as Test;
-use PHPUnit_Framework_TestSuite as TestSuite;
-use PHPUnit_Framework_AssertionFailedError as AssertionFailedError;
 
-class NotifierListener extends \PHPUnit_Framework_BaseTestListener
+use \PHPUnit\Framework\Test as Test;
+use \PHPUnit\Framework\Warning as Warning;
+use \PHPUnit\Framework\TestSuite as TestSuite;
+use \PHPUnit\Framework\AssertionFailedError as AssertionFailedError;
+
+class NotifierListener extends \PHPUnit\Framework\TestCase implements \PHPUnit\Framework\TestListener
 {
     private $notifier;
     private $errors = 0;
@@ -37,6 +39,23 @@ class NotifierListener extends \PHPUnit_Framework_BaseTestListener
         $this->failures++;
     }
 
+    public function addWarning(Test $test, Warning $e, $time)
+    {
+
+    }
+
+    public function addIncompleteTest(Test $test, \Exception $e, $time)
+    {
+
+    }
+    public function addRiskyTest(Test $test, \Exception $e, $time)
+    {
+
+    }
+    public function addSkippedTest(Test $test, \Exception $e, $time)
+    {
+
+    }
     public function startTestSuite(TestSuite $suite)
     {
         $this->suites++;
@@ -54,14 +73,18 @@ class NotifierListener extends \PHPUnit_Framework_BaseTestListener
         if ($failures === 0) {
             $title = sprintf('%sSuccess', self::$is_darwin ? '✅ ' : '');
             $body  = sprintf('%d/%d tests passed', $this->tests, $this->tests);
+            $icon  = '/Users/junaidnasir/Drive/icons/cancel.png';
         } else {
             $title = sprintf('%sFailed', self::$is_darwin ? '🚫 ' : '');
             $body  = sprintf('%d/%d tests failed', $failures, $this->tests);
+            $icon  = '/Users/junaidnasir/Drive/icons/check.png';
         }
 
         $notification = (new Notification())
             ->setTitle($title)
             ->setBody($body)
+            ->setIcon($icon)
+            ->addOption('subtitle', 'This is a subtitle')
         ;
         $this->notifier->send($notification);
     }
@@ -69,5 +92,9 @@ class NotifierListener extends \PHPUnit_Framework_BaseTestListener
     public function startTest(Test $test)
     {
         $this->tests++;
+    }
+    public function endTest(Test $test, $time)
+    {
+
     }
 }
